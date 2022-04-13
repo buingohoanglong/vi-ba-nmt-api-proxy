@@ -10,7 +10,7 @@ var cors = require('cors');
  */
 const app = express();
 const port = process.env.PORT || "8080";
-const targetUrl = 'http://cse.hcmut.edu.vn/ura-nmt/translate';
+const targetUrl = 'http://cse.hcmut.edu.vn/ura-nmt/api';
 /**
  *  App Configuration
  */
@@ -27,11 +27,12 @@ const options = {
     target: targetUrl, // target host
     changeOrigin: true, // needed for virtual hosted sites
     pathRewrite: {
-       [`^/translate`]: '',
+       [`^/(.*)`]: '/$1',
     }, // rewrites our endpoints to '' when forwarded to our target
 }
 
-app.post("/translate", httpProxy.createProxyMiddleware(options))
+app.post("/*", httpProxy.createProxyMiddleware(options))
+app.get("/*", httpProxy.createProxyMiddleware(options))
 
 /**
  * Server Activation
